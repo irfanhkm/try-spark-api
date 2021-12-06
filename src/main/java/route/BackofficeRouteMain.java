@@ -2,12 +2,11 @@ package route;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import dao.MovieSpec;
 
 import static spark.Spark.*;
 
 public class BackofficeRouteMain {
-
-
     static class Result {
         @SerializedName("account_num")
         public String accountnumStr;
@@ -19,14 +18,6 @@ public class BackofficeRouteMain {
     public static void main(String[] args) {
         after((req, res) -> {
             res.type("application/json");
-        });
-
-        internalServerError((req, res) -> {
-            Result result = new Result();
-            result.accountnumStr = "irfan";
-            result.nameStr = "hakim";
-            return new Gson()
-                    .toJson(result);
         });
 
         get("/hello", (req, res) -> "Hello World");
@@ -47,9 +38,10 @@ public class BackofficeRouteMain {
             });
             path("/tags", () -> {
                 get("",  (q, a) -> {
-                    throw new Exception();
-//                    System.out.print("Received tags GET");
-//                    return true;
+                    MovieSpec movieSpec = new MovieSpec();
+                    System.out.println(movieSpec.getAll());
+                    return new Gson()
+                            .toJson(null);
                 });
             });
         });
