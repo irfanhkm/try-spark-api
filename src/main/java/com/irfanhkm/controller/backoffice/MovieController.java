@@ -1,26 +1,19 @@
-package route;
+package com.irfanhkm.controller.backoffice;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-import dao.MovieSpec;
+import com.irfanhkm.service.MovieService;
+
+import javax.inject.Inject;
 
 import static spark.Spark.*;
 
-public class BackofficeRouteMain {
-    static class Result {
-        @SerializedName("account_num")
-        public String accountnumStr;
+public class MovieController {
 
-        @SerializedName("name")
-        public String nameStr;
-    }
+    @Inject
+    private MovieService movieService;
 
-    public static void main(String[] args) {
-        after((req, res) -> {
-            res.type("application/json");
-        });
-
-        get("/hello", (req, res) -> "Hello World");
+    public void routes()
+    {
         path("/api/v1/backoffice", () -> {
             before("/*", (q, a) -> System.out.println("Received API Call"));
             path("/movies", () -> {
@@ -38,8 +31,7 @@ public class BackofficeRouteMain {
             });
             path("/tags", () -> {
                 get("",  (q, a) -> {
-                    MovieSpec movieSpec = new MovieSpec();
-                    System.out.println(movieSpec.getAll());
+                    System.out.println(movieService.getAll());
                     return new Gson()
                             .toJson(null);
                 });
